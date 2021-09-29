@@ -16,30 +16,59 @@ average(3, 2)
 
 and that's it for now!
 
-## Local setup
+## Running things locally
 
-Clone the repository and check out the directory
-
-```sh
-git clone git@github.com:maciejsmolinski/toy-lang.git && cd toy-lang
-```
-
-Install npm dependencies
+Clone the repository, check out the directory and install dependencies
 
 ```sh
-npm install
+git clone git@github.com:maciejsmolinski/toy-lang.git
+cd toy-lang && npm install
 ```
 
-## Running the project locally
-
-To get continuous feedback on file change
+Run the code and watch for file changes
 
 ```sh
 npm run watch
 ```
 
-Or, to execute once
+## Output
+
+The outcome of running the code
 
 ```sh
-npm run run
+[INPUT]
+
+  321.123
+
+[OUTPUT]
+
+{ type: 'number', value: 321.123 }
+
+...
+
+[INPUT]
+
+return 123
+
+[OUTPUT]
+
+{ type: 'return' }
+{ type: 'number', value: 123 }
+
+...
+
+[INPUT]
+
+
+  fun average(a, b) {
+    return (a + b) / 2
+  }
+
+  average(3, 2)
+
+
+[OUTPUT]
+
+{ type: 'string', value: 'fun' }
+{ type: 'string', value: 'average' }
 ```
