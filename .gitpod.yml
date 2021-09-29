@@ -1,0 +1,4 @@
+tasks:
+  - name: Execution Status
+    init: npm install
+    command: npm run watch
