@@ -16,12 +16,12 @@ average(3, 2)
 
 and that's it for now!
 
-## Run the project directly in the browser
+## Run the project directly in your browser
 
 Open and run the project via gitpod.io:
 https://gitpod.io/#https://github.com/maciejsmolinski/toy-lang/blob/main/index.ts
 
-## Running the project locally
+## Run the project locally
 
 Clone the repository, check out the directory and install dependencies
 
@@ -36,9 +36,7 @@ Run the code and watch for file changes
 npm run watch
 ```
 
-## Output
-
-The outcome of running the code
+The output printed on the screen
 
 ```sh
 [INPUT]
