@@ -3,7 +3,7 @@ const program = `
     return (a + b) / 2
   }
 
-  average(3, 2)
+  average(3.14, 2)
 `;
 
 type TokenType =
@@ -154,8 +154,4 @@ function tokenize(text: string) {
   }
 }
 
-tokenize('  123');
-tokenize('  321.123');
-tokenize('  321....');
-tokenize('return 123');
 tokenize(program);

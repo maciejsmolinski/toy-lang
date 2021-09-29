@@ -11,7 +11,7 @@ fun average(a, b) {
   return (a + b) / 2
 }
 
-average(3, 2)
+average(3.14, 2)
 ```
 
 and that's it for now!
@@ -44,33 +44,12 @@ The output printed on the screen
 ```sh
 [INPUT]
 
-  321.123
-
-[OUTPUT]
-
-{ type: 'number', value: 321.123 }
-
-...
-
-[INPUT]
-
-return 123
-
-[OUTPUT]
-
-{ type: 'return' }
-{ type: 'number', value: 123 }
-
-...
-
-[INPUT]
-
 
   fun average(a, b) {
     return (a + b) / 2
   }
 
-  average(3, 2)
+  average(3.14, 2)
 
 
 [OUTPUT]
@@ -94,7 +73,7 @@ return 123
 { type: 'rightBrace' }
 { type: 'identifier', value: 'average' }
 { type: 'leftParen' }
-{ type: 'number', value: 3 }
+{ type: 'number', value: 3.14 }
 { type: 'comma' }
 { type: 'number', value: 2 }
 { type: 'rightParen' }
