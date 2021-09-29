@@ -1,0 +1,16 @@
+{
+  "name": "toy-lang",
+  "private": true,
+  "description": "A Turing incomplete toy language",
+  "version": "1.0.0",
+  "author": "Maciej Smolinski <contact@maciejsmolinski.com>",
+  "license": "MIT",
+  "main": "index.ts",
+  "scripts": {
+    "run": "ts-node-dev index.ts",
+    "watch": "ts-node-dev --respawn index.ts"
+  },
+  "devDependencies": {
+    "ts-node-dev": "^1.1.8"
+  }
+}
