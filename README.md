@@ -18,7 +18,10 @@ and that's it for now!
 
 ## Run the project directly in your browser
 
+<img src="/assets/preview.png" width="450" />
+
 Open and run the project via gitpod.io:
+
 https://gitpod.io/#https://github.com/maciejsmolinski/toy-lang/blob/main/index.ts
 
 ## Run the project locally
