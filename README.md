@@ -16,7 +16,12 @@ average(3, 2)
 
 and that's it for now!
 
-## Running things locally
+## Run the project directly in the browser
+
+Open and run the project via gitpod.io:
+https://gitpod.io/#https://github.com/maciejsmolinski/toy-lang/blob/main/index.ts
+
+## Running the project locally
 
 Clone the repository, check out the directory and install dependencies
 
