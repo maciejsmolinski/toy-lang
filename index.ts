@@ -74,6 +74,32 @@ class Lexer {
       return null;
     }
 
+    if (
+      ['{', '}', '(', ')', ',', '+', '-', '/', '*'].includes(
+        this.scanner.peek()
+      )
+    ) {
+      const val = this.scanner.read();
+
+      switch (val) {
+        case '{':
+          return { type: 'leftBrace' };
+        case '}':
+          return { type: 'rightBrace' };
+        case '(':
+          return { type: 'leftParen' };
+        case ')':
+          return { type: 'rightParen' };
+        case ',':
+          return { type: 'comma' };
+        case '+':
+        case '-':
+        case '/':
+        case '*':
+          return { type: 'operator', value: val };
+      }
+    }
+
     if (this.isNumeric(this.scanner.peek())) {
       let number = this.scanner.read();
 
@@ -105,7 +131,7 @@ class Lexer {
         }
       }
 
-      token ||= { type: 'string', value: string };
+      token ||= { type: 'identifier', value: string };
 
       return token;
     }
@@ -133,28 +159,3 @@ tokenize('  321.123');
 tokenize('  321....');
 tokenize('return 123');
 tokenize(program);
-
-// const tokens: Token[] = [
-//   { type: 'fun' },
-//   { type: 'identifier', value: 'average' },
-//   { type: 'leftParen' },
-//   { type: 'identifier', value: 'a' },
-//   { type: 'comma' },
-//   { type: 'identifier', value: 'b' },
-//   { type: 'rightParen' },
-//   { type: 'leftBrace' },
-//   { type: 'return' },
-//   { type: 'leftParen' },
-//   { type: 'identifier', value: 'a' },
-//   { type: 'operator', value: '+' },
-//   { type: 'identifier', value: 'b' },
-//   { type: 'rightParen' },
-//   { type: 'operator', value: '/' },
-//   { type: 'number', value: '2' },
-//   { type: 'rightBrace' },
-//   { type: 'identifier', value: 'average' },
-//   { type: 'leftParen' },
-//   { type: 'number', value: 3 },
-//   { type: 'number', value: 2 },
-//   { type: 'rightParen' },
-// ];

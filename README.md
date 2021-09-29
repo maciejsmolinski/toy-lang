@@ -75,6 +75,27 @@ return 123
 
 [OUTPUT]
 
-{ type: 'string', value: 'fun' }
-{ type: 'string', value: 'average' }
+{ type: 'identifier', value: 'fun' }
+{ type: 'identifier', value: 'average' }
+{ type: 'leftParen' }
+{ type: 'identifier', value: 'a' }
+{ type: 'comma' }
+{ type: 'identifier', value: 'b' }
+{ type: 'rightParen' }
+{ type: 'leftBrace' }
+{ type: 'return' }
+{ type: 'leftParen' }
+{ type: 'identifier', value: 'a' }
+{ type: 'operator', value: '+' }
+{ type: 'identifier', value: 'b' }
+{ type: 'rightParen' }
+{ type: 'operator', value: '/' }
+{ type: 'number', value: 2 }
+{ type: 'rightBrace' }
+{ type: 'identifier', value: 'average' }
+{ type: 'leftParen' }
+{ type: 'number', value: 3 }
+{ type: 'comma' }
+{ type: 'number', value: 2 }
+{ type: 'rightParen' }
 ```
