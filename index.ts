@@ -1,6 +1,4 @@
-import Lexer from './src/Lexer';
-import Parser from './src/Parser';
-import Scanner from './src/Scanner';
+import { Lexer, Parser, Scanner } from './src';
 
 const program = `
   fun average(a, b) {
