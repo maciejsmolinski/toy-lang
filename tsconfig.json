@@ -15,7 +15,7 @@
     "emitDecoratorMetadata": true,
     "target": "ES2017",
     "jsx": "react",
-    "module": "ESNext",
+    "module": "commonjs",
     "moduleResolution": "node"
   }
 }
