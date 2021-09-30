@@ -25,8 +25,8 @@ interface Token {
 }
 
 class Scanner {
-  pos: number;
-  text: string;
+  private pos: number;
+  private text: string;
 
   constructor(text: string) {
     this.pos = -1;
@@ -53,7 +53,7 @@ class Scanner {
 }
 
 class Lexer {
-  scanner: Scanner;
+  private scanner: Scanner;
 
   constructor(scanner: Scanner) {
     this.scanner = scanner;
