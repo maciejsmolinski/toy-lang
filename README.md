@@ -52,7 +52,8 @@ The output printed on the screen
   average(3.14, 2)
 
 
-[OUTPUT]
+
+[TOKENIZE:OUTPUT]
 
 { type: 'identifier', value: 'fun' }
 { type: 'identifier', value: 'average' }
@@ -77,4 +78,15 @@ The output printed on the screen
 { type: 'comma' }
 { type: 'number', value: 2 }
 { type: 'rightParen' }
+
+
+[PARSE:OUTPUT]
+
+{
+  "type": "Program",
+  "body": {
+    "type": "FunctionDeclaration",
+    "name": "average"
+  }
+}
 ```
