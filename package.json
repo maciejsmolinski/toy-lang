@@ -7,8 +7,8 @@
   "license": "MIT",
   "main": "index.ts",
   "scripts": {
-    "run": "ts-node-dev index.ts",
-    "watch": "ts-node-dev --respawn index.ts"
+    "run": "tsc --noEmit && ts-node-dev index.ts",
+    "watch": "tsc --noEmit && ts-node-dev --respawn index.ts"
   },
   "devDependencies": {
     "ts-node-dev": "^1.1.8",
