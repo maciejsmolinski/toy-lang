@@ -152,11 +152,11 @@ class Parser {
     this.lookahead = this.lexer.next();
 
     if (type && this.lookahead?.type !== type) {
-      throw new Error(`Unexpected token ${this.lookahead}`);
+      throw new Error(`Unexpected token ${JSON.stringify(this.lookahead)}`);
     }
 
     if (value && this.lookahead?.value !== value) {
-      throw new Error(`Unexpected token ${this.lookahead}`);
+      throw new Error(`Unexpected token ${JSON.stringify(this.lookahead)}`);
     }
 
     return this.lookahead;
@@ -179,7 +179,9 @@ class Parser {
       return this.fun();
     }
 
-    return null;
+    throw new Error(
+      `Error parsing. Unexpected token ${JSON.stringify(this.lookahead)}`
+    );
   }
 
   private fun() {
