@@ -140,18 +140,77 @@ class Lexer {
   }
 }
 
+class Parser {
+  private lexer: Lexer;
+  private lookahead: Token | null | undefined;
+
+  constructor(lexer: Lexer) {
+    this.lexer = lexer;
+  }
+
+  private match(type?: string, value?: any) {
+    this.lookahead = this.lexer.next();
+
+    if (type && this.lookahead?.type !== type) {
+      throw new Error(`Unexpected token ${this.lookahead}`);
+    }
+
+    if (value && this.lookahead?.value !== value) {
+      throw new Error(`Unexpected token ${this.lookahead}`);
+    }
+
+    return this.lookahead;
+  }
+
+  parse() {
+    this.match();
+    return this.program();
+  }
+
+  private program() {
+    return { type: 'Program', body: this.stmts() };
+  }
+
+  private stmts() {
+    if (
+      this.lookahead?.type === 'identifier' &&
+      this.lookahead?.value === 'fun'
+    ) {
+      return this.fun();
+    }
+
+    return null;
+  }
+
+  private fun() {
+    const name = this.match('identifier')?.value;
+    this.match('leftParen');
+
+    return { type: 'FunctionDeclaration', name };
+  }
+}
+
 function tokenize(text: string) {
-  const lexer = new Scanner(text);
-  const tokens = new Lexer(lexer);
+  const scanner = new Scanner(text);
+  const lexer = new Lexer(scanner);
   let token;
 
   console.log(`\n\n[INPUT]\n\n${text}\n`);
 
   console.log('[OUTPUT]\n');
 
-  while ((token = tokens.next())) {
+  while ((token = lexer.next())) {
     console.log(token);
   }
 }
 
+function parse(text: string) {
+  const scanner = new Scanner(text);
+  const lexer = new Lexer(scanner);
+  const parser = new Parser(lexer);
+
+  console.log(JSON.stringify(parser.parse(), null, 2));
+}
+
 tokenize(program);
+// parse(program);
