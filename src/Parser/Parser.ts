@@ -10,7 +10,7 @@ export default class Parser {
 
   parse() {
     this.match();
-    return this.program();
+    return this.Program();
   }
 
   private match(type?: string, value?: any) {
@@ -27,27 +27,75 @@ export default class Parser {
     return this.lookahead;
   }
 
-  private program() {
-    return { type: 'Program', body: this.stmts() };
+  private Program() {
+    return { type: 'Program', body: this.Statements() };
   }
 
-  private stmts() {
+  private Statements() {
+    const statements = [];
+
+    while (this.lookahead) {
+      const statement = this.Statement();
+      statement && statements.push(statement);
+    }
+
+    return statements;
+  }
+
+  private Statement() {
     if (
       this.lookahead?.type === 'identifier' &&
       this.lookahead?.value === 'fun'
     ) {
-      return this.fun();
+      return this.FunctionDeclaration();
+    } else if (
+      this.lookahead?.type === 'identifier' &&
+      this.lookahead?.value === 'average' // hack
+    ) {
+      return this.FunctionCall();
+    } else {
+      this.match();
+      // throw new Error(
+      //   `Error parsing. Unexpected token ${JSON.stringify(this.lookahead)}`
+      // );
+      return;
     }
-
-    throw new Error(
-      `Error parsing. Unexpected token ${JSON.stringify(this.lookahead)}`
-    );
   }
 
-  private fun() {
+  private BlockStatement() {
+    this.match('{');
+    const statements = this.Statements();
+    this.match('}');
+
+    return { type: 'BlockStatement', body: statements };
+  }
+
+  private FunctionDeclaration() {
     const name = this.match('identifier')?.value;
     this.match('leftParen');
 
-    return { type: 'FunctionDeclaration', name };
+    return { type: 'FunctionDeclaration', name, params: [], body: [] };
+  }
+
+  private FunctionCall() {
+    const name = this.lookahead?.value;
+    const args = [];
+
+    this.match('leftParen');
+
+    let next;
+
+    while ((next = this.match())) {
+      if (next?.type === 'rightParen') {
+        break;
+      }
+      if (next?.type === 'comma') {
+        continue;
+      }
+
+      args.push(next?.value);
+    }
+
+    return { type: 'FunctionCall', name, args };
   }
 }
