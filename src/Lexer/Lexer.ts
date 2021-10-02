@@ -15,6 +15,15 @@ export default class Lexer {
     return /\w/.test(char);
   }
 
+  peek(): Token | null {
+    const position = this.scanner.getPosition();
+    const token = this.next();
+
+    this.scanner.setPosition(position);
+
+    return token;
+  }
+
   next(): Token | null {
     this.scanner.consume('\n', ' ');
 
