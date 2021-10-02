@@ -6,25 +6,30 @@ export default class Parser {
 
   constructor(lexer: Lexer) {
     this.lexer = lexer;
+    this.lookahead = this.peek();
   }
 
   parse() {
-    this.match();
     return this.Program();
   }
 
+  private peek() {
+    return this.lexer.peek();
+  }
+
   private match(type?: string, value?: any) {
-    this.lookahead = this.lexer.next();
+    const token = this.lexer.next();
+    this.lookahead = this.peek();
 
-    if (type && this.lookahead?.type !== type) {
+    if (type && token?.type !== type) {
       throw new Error(`Unexpected token ${JSON.stringify(this.lookahead)}`);
     }
 
-    if (value && this.lookahead?.value !== value) {
+    if (value && token?.value !== value) {
       throw new Error(`Unexpected token ${JSON.stringify(this.lookahead)}`);
     }
 
-    return this.lookahead;
+    return token;
   }
 
   private Program() {
@@ -33,10 +38,10 @@ export default class Parser {
 
   private Statements() {
     const statements = [];
+    let next;
 
-    while (this.lookahead) {
-      const statement = this.Statement();
-      statement && statements.push(statement);
+    while ((next = this.Statement())) {
+      statements.push(next);
     }
 
     return statements;
@@ -53,6 +58,8 @@ export default class Parser {
       this.lookahead?.value === 'average' // hack
     ) {
       return this.FunctionCall();
+    } else if (this.lookahead?.type === 'return') {
+      return this.ReturnStatement();
     } else {
       this.match();
       // throw new Error(
@@ -62,23 +69,62 @@ export default class Parser {
     }
   }
 
-  private BlockStatement() {
-    this.match('{');
-    const statements = this.Statements();
-    this.match('}');
+  private Expr() {
+    // @TODO
+  }
 
-    return { type: 'BlockStatement', body: statements };
+  private BinaryExpression() {
+    const left = this.match();
+    const op = this.match('operator')?.value;
+    const right = this.match();
+
+    return { type: 'BinaryExpression', left, op, right };
+  }
+
+  private ReturnStatement() {
+    this.match('return');
+    const expr = this.match();
+    return { type: 'ReturnStatement', expr };
+  }
+
+  private BlockStatement() {
+    this.match('leftBrace');
+
+    let next = this.match();
+
+    while (next?.type !== 'rightBrace') {
+      next = this.match();
+    }
+
+    return { type: 'BlockStatement', body: [] };
   }
 
   private FunctionDeclaration() {
+    this.match('identifier', 'fun');
     const name = this.match('identifier')?.value;
     this.match('leftParen');
 
-    return { type: 'FunctionDeclaration', name, params: [], body: [] };
+    const params = [];
+    let next;
+
+    while ((next = this.match())) {
+      if (next?.type === 'rightParen') {
+        break;
+      }
+      if (next?.type === 'comma') {
+        continue;
+      }
+
+      params.push(next?.value);
+    }
+
+    const body = this.BlockStatement();
+
+    return { type: 'FunctionDeclaration', name, params, body };
   }
 
   private FunctionCall() {
-    const name = this.lookahead?.value;
+    const name = this.match('identifier')?.value;
     const args = [];
 
     this.match('leftParen');
