@@ -17,5 +17,6 @@ export interface Token {
 }
 
 export interface Lexer {
+  peek(): Token | null;
   next(): Token | null;
 }

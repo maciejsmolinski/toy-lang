@@ -19,6 +19,14 @@ export default class Scanner {
     return this.text[this.pos + 1] || '';
   }
 
+  getPosition() {
+    return this.pos;
+  }
+
+  setPosition(position: number) {
+    this.pos = position;
+  }
+
   consume(...chars: string[]) {
     while (this.peek() && chars.includes(this.peek())) {
       this.read();
