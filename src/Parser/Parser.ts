@@ -26,10 +26,8 @@ export default class Parser extends GenericParser {
     } else if (this.lookahead?.type === 'return') {
       return this.ReturnStatement();
     } else {
+      // Consume next token, return nothing
       this.match();
-      // throw new Error(
-      //   `Error parsing. Unexpected token ${JSON.stringify(this.lookahead)}`
-      // );
       return;
     }
   }
@@ -49,16 +47,12 @@ export default class Parser extends GenericParser {
     }
   }
 
-  private Expr() {
+  private Expression() {
     // @TODO
   }
 
   private BinaryExpression() {
     // @TODO
-    // const left = this.match();
-    // const op = this.match('operator')?.value;
-    // const right = this.match();
-    // return { type: 'BinaryExpression', left, op, right };
   }
 
   private ReturnStatement() {
