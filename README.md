@@ -84,9 +84,27 @@ The output printed on the screen
 
 {
   "type": "Program",
-  "body": {
-    "type": "FunctionDeclaration",
-    "name": "average"
-  }
+  "body": [
+    {
+      "type": "FunctionDeclaration",
+      "name": "average",
+      "params": [
+        "a",
+        "b"
+      ],
+      "body": {
+        "type": "BlockStatement",
+        "body": []
+      }
+    },
+    {
+      "type": "FunctionCall",
+      "name": "average",
+      "args": [
+        3.14,
+        2
+      ]
+    }
+  ]
 }
 ```
