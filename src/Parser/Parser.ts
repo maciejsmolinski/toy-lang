@@ -1,35 +1,8 @@
-import { Lexer, Token } from '../types';
+import GenericParser from './GenericParser';
 
-export default class Parser {
-  private lexer: Lexer;
-  private lookahead: Token | null | undefined;
-
-  constructor(lexer: Lexer) {
-    this.lexer = lexer;
-    this.lookahead = this.peek();
-  }
-
+export default class Parser extends GenericParser {
   parse() {
     return this.Program();
-  }
-
-  private peek() {
-    return this.lexer.peek();
-  }
-
-  private match(type?: string, value?: any) {
-    const token = this.lexer.next();
-    this.lookahead = this.peek();
-
-    if (type && token?.type !== type) {
-      throw new Error(`Unexpected token ${JSON.stringify(this.lookahead)}`);
-    }
-
-    if (value && token?.value !== value) {
-      throw new Error(`Unexpected token ${JSON.stringify(this.lookahead)}`);
-    }
-
-    return token;
   }
 
   private Program() {
@@ -67,6 +40,10 @@ export default class Parser {
       // );
       return;
     }
+  }
+
+  private Identifier() {
+    // @TODO
   }
 
   private Expr() {
