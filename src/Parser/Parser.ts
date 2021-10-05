@@ -21,16 +21,8 @@ export default class Parser extends GenericParser {
   }
 
   private Statement() {
-    if (
-      this.lookahead?.type === 'identifier' &&
-      this.lookahead?.value === 'fun'
-    ) {
-      return this.FunctionDeclaration();
-    } else if (
-      this.lookahead?.type === 'identifier' &&
-      this.lookahead?.value === 'average' // hack
-    ) {
-      return this.FunctionCall();
+    if (this.lookahead?.type === 'identifier') {
+      return this.Identifier();
     } else if (this.lookahead?.type === 'return') {
       return this.ReturnStatement();
     } else {
@@ -43,7 +35,18 @@ export default class Parser extends GenericParser {
   }
 
   private Identifier() {
-    // @TODO
+    switch (this.lookahead?.value) {
+      case 'fun':
+        return this.FunctionDeclaration();
+      default:
+        const name = this.match()?.value;
+
+        if (this.lookahead?.type === 'leftParen') {
+          return this.FunctionCall(name);
+        }
+
+        return { type: 'Identifier', name: this.match()?.value };
+    }
   }
 
   private Expr() {
@@ -51,11 +54,11 @@ export default class Parser extends GenericParser {
   }
 
   private BinaryExpression() {
-    const left = this.match();
-    const op = this.match('operator')?.value;
-    const right = this.match();
-
-    return { type: 'BinaryExpression', left, op, right };
+    // @TODO
+    // const left = this.match();
+    // const op = this.match('operator')?.value;
+    // const right = this.match();
+    // return { type: 'BinaryExpression', left, op, right };
   }
 
   private ReturnStatement() {
@@ -100,8 +103,7 @@ export default class Parser extends GenericParser {
     return { type: 'FunctionDeclaration', name, params, body };
   }
 
-  private FunctionCall() {
-    const name = this.match('identifier')?.value;
+  private FunctionCall(name: string) {
     const args = [];
 
     this.match('leftParen');
