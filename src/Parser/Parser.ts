@@ -89,7 +89,9 @@ export default class Parser extends GenericParser {
         continue;
       }
 
-      params.push(next?.value);
+      if (next?.type === 'identifier') {
+        params.push({ type: 'Identifier', name: next?.value });
+      }
     }
 
     const body = this.BlockStatement();
@@ -112,7 +114,13 @@ export default class Parser extends GenericParser {
         continue;
       }
 
-      args.push(next?.value);
+      if (next?.type === 'number') {
+        args.push({ type: 'NumericLiteral', value: next?.value });
+      }
+
+      if (next?.type === 'identifier') {
+        args.push({ type: 'Identifier', name: next?.value });
+      }
     }
 
     return { type: 'FunctionCall', name, args };

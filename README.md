@@ -89,8 +89,14 @@ The output printed on the screen
       "type": "FunctionDeclaration",
       "name": "average",
       "params": [
-        "a",
-        "b"
+        {
+          "type": "Identifier",
+          "name": "a"
+        },
+        {
+          "type": "Identifier",
+          "name": "b"
+        }
       ],
       "body": {
         "type": "BlockStatement",
@@ -101,8 +107,14 @@ The output printed on the screen
       "type": "FunctionCall",
       "name": "average",
       "args": [
-        3.14,
-        2
+        {
+          "type": "NumericLiteral",
+          "value": 3.14
+        },
+        {
+          "type": "NumericLiteral",
+          "value": 2
+        }
       ]
     }
   ]
