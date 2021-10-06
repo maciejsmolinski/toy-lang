@@ -32,18 +32,20 @@ export default class Parser extends GenericParser {
     }
   }
 
-  private Identifier() {
+  private Identifier(previous?: any) {
     switch (this.lookahead?.value) {
       case 'fun':
         return this.FunctionDeclaration();
       default:
-        const name = this.match()?.value;
+        const identifier = { type: 'Identifier', name: this.match()?.value };
 
-        if (this.lookahead?.type === 'leftParen') {
-          return this.FunctionCall(name);
+        if (previous?.value !== 'fun' && this.lookahead?.type === 'leftParen') {
+          return this.FunctionCall(
+            identifier as { type: 'Identifier'; name: string }
+          );
         }
 
-        return { type: 'Identifier', name };
+        return identifier;
     }
   }
 
@@ -85,8 +87,11 @@ export default class Parser extends GenericParser {
   }
 
   private FunctionDeclaration() {
-    this.match('identifier', 'fun');
-    const name = this.match('identifier')?.value;
+    const previous = this.match('identifier', 'fun');
+    const name = this.Identifier(previous) as {
+      type: 'Identifier';
+      name: string;
+    };
 
     this.match('leftParen');
 
@@ -107,13 +112,12 @@ export default class Parser extends GenericParser {
 
     do {
       params.push(this.Identifier());
-      console.log(params, this.lookahead?.type);
     } while (this.lookahead?.type === 'comma' && this.match('comma'));
 
     return params;
   }
 
-  private FunctionCall(name: string) {
+  private FunctionCall(name: { type: 'Identifier'; name: string }) {
     const args = [];
 
     this.match('leftParen');
