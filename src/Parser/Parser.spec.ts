@@ -16,11 +16,19 @@ function Program(body: any[]) {
   return { type: 'Program', body };
 }
 
+const functionDeclaration = `
+fun average(a, b) {
+  return (a + b) / 2
+}
+`;
+
+const functionCall = `
+average(3.14, 2)
+`;
+
 describe('Parser', () => {
   describe('FunctionDeclaration', () => {
-    const code = `fun average(a, b) {
-      return (a + b) / 2
-    }`;
+    const code = functionDeclaration;
     const ast = Program([
       {
         type: 'FunctionDeclaration',
@@ -38,8 +46,36 @@ describe('Parser', () => {
   });
 
   describe('FunctionCall', () => {
-    const code = `average(3.14, 2)`;
+    const code = functionCall;
     const ast = Program([
+      {
+        type: 'FunctionCall',
+        name: Identifier('average'),
+        args: [NumericLiteral(3.14), NumericLiteral(2)],
+      },
+    ]);
+
+    const { parser } = prepare(code);
+
+    it('should return proper parse tree', () => {
+      expect(parser.parse()).toEqual(ast);
+    });
+  });
+
+  describe('Statements', () => {
+    const code = `
+      ${functionDeclaration}
+      ${functionCall}
+    `;
+
+    const ast = Program([
+      {
+        type: 'FunctionDeclaration',
+        name: Identifier('average'),
+        params: [Identifier('a'), Identifier('b')],
+        body: BlockStatement([]),
+      },
+
       {
         type: 'FunctionCall',
         name: Identifier('average'),
