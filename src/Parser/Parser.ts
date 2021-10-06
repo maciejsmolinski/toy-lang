@@ -25,8 +25,15 @@ export default class Parser extends GenericParser {
       switch (this.lookahead?.value) {
         case 'fun':
           return this.FunctionDeclaration();
-        default:
-          return this.Identifier();
+        default: {
+          const identifier = this.Identifier();
+
+          if ((this.lookahead as any)?.type === 'leftParen') {
+            return this.FunctionCall(identifier);
+          }
+
+          return identifier;
+        }
       }
     } else if (this.lookahead?.type === 'return') {
       return this.ReturnStatement();
@@ -37,16 +44,10 @@ export default class Parser extends GenericParser {
     }
   }
 
-  private Identifier(previous?: any) {
-    const identifier = { type: 'Identifier', name: this.match()?.value };
+  private Identifier(): { type: 'Identifier'; name: string } {
+    const identifier = this.match('identifier');
 
-    if (previous?.value !== 'fun' && this.lookahead?.type === 'leftParen') {
-      return this.FunctionCall(
-        identifier as { type: 'Identifier'; name: string }
-      );
-    }
-
-    return identifier;
+    return { type: 'Identifier', name: identifier?.value };
   }
 
   private Literal() {
@@ -87,11 +88,9 @@ export default class Parser extends GenericParser {
   }
 
   private FunctionDeclaration() {
-    const previous = this.match('identifier', 'fun');
-    const name = this.Identifier(previous) as {
-      type: 'Identifier';
-      name: string;
-    };
+    this.match('identifier', 'fun');
+
+    const name = this.Identifier();
 
     this.match('leftParen');
 
