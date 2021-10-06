@@ -22,7 +22,12 @@ export default class Parser extends GenericParser {
 
   private Statement() {
     if (this.lookahead?.type === 'identifier') {
-      return this.Identifier();
+      switch (this.lookahead?.value) {
+        case 'fun':
+          return this.FunctionDeclaration();
+        default:
+          return this.Identifier();
+      }
     } else if (this.lookahead?.type === 'return') {
       return this.ReturnStatement();
     } else {
@@ -33,20 +38,15 @@ export default class Parser extends GenericParser {
   }
 
   private Identifier(previous?: any) {
-    switch (this.lookahead?.value) {
-      case 'fun':
-        return this.FunctionDeclaration();
-      default:
-        const identifier = { type: 'Identifier', name: this.match()?.value };
+    const identifier = { type: 'Identifier', name: this.match()?.value };
 
-        if (previous?.value !== 'fun' && this.lookahead?.type === 'leftParen') {
-          return this.FunctionCall(
-            identifier as { type: 'Identifier'; name: string }
-          );
-        }
-
-        return identifier;
+    if (previous?.value !== 'fun' && this.lookahead?.type === 'leftParen') {
+      return this.FunctionCall(
+        identifier as { type: 'Identifier'; name: string }
+      );
     }
+
+    return identifier;
   }
 
   private Literal() {
