@@ -17,12 +17,14 @@ export default class GenericParser {
     const token = this.lexer.next();
     this.lookahead = this.peek();
 
-    if (type && token?.type !== type) {
-      throw new Error(`Unexpected token ${JSON.stringify(token)}`);
-    }
+    if ((type && token?.type !== type) || (value && token?.value !== value)) {
+      const expected = { ...(type && { type }), ...(value && { value }) };
 
-    if (value && token?.value !== value) {
-      throw new Error(`Unexpected token ${JSON.stringify(token)}`);
+      throw new Error(
+        `Unexpected token ${JSON.stringify(token)}, expected ${JSON.stringify(
+          expected
+        )}`
+      );
     }
 
     return token;
