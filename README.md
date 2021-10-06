@@ -87,7 +87,10 @@ The output printed on the screen
   "body": [
     {
       "type": "FunctionDeclaration",
-      "name": "average",
+      "name": {
+        "type": "Identifier",
+        "name": "average"
+      },
       "params": [
         {
           "type": "Identifier",
@@ -105,7 +108,10 @@ The output printed on the screen
     },
     {
       "type": "FunctionCall",
-      "name": "average",
+      "name": {
+        "type": "Identifier",
+        "name": "average"
+      },
       "args": [
         {
           "type": "NumericLiteral",
@@ -119,4 +125,5 @@ The output printed on the screen
     }
   ]
 }
+
 ```
