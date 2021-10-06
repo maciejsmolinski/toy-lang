@@ -43,8 +43,19 @@ export default class Parser extends GenericParser {
           return this.FunctionCall(name);
         }
 
-        return { type: 'Identifier', name: this.match()?.value };
+        return { type: 'Identifier', name };
     }
+  }
+
+  private Literal() {
+    switch (this.lookahead?.type) {
+      default:
+        return this.NumericLiteral();
+    }
+  }
+
+  private NumericLiteral() {
+    return { type: 'NumericLiteral', value: this.match('number')?.value };
   }
 
   private Expression() {
@@ -76,27 +87,30 @@ export default class Parser extends GenericParser {
   private FunctionDeclaration() {
     this.match('identifier', 'fun');
     const name = this.match('identifier')?.value;
+
     this.match('leftParen');
 
-    const params = [];
-    let next;
+    const params = this.ParametersList() as {
+      type: 'Identifier';
+      name: string;
+    }[];
 
-    while ((next = this.match())) {
-      if (next?.type === 'rightParen') {
-        break;
-      }
-      if (next?.type === 'comma') {
-        continue;
-      }
-
-      if (next?.type === 'identifier') {
-        params.push({ type: 'Identifier', name: next?.value });
-      }
-    }
+    this.match('rightParen');
 
     const body = this.BlockStatement();
 
     return { type: 'FunctionDeclaration', name, params, body };
+  }
+
+  private ParametersList() {
+    const params = [];
+
+    do {
+      params.push(this.Identifier());
+      console.log(params, this.lookahead?.type);
+    } while (this.lookahead?.type === 'comma' && this.match('comma'));
+
+    return params;
   }
 
   private FunctionCall(name: string) {
