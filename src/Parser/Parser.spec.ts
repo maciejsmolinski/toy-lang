@@ -8,6 +8,10 @@ function NumericLiteral(value: number) {
   return { type: 'NumericLiteral', value };
 }
 
+function BinaryExpression(left: unknown, operator: string, right: unknown) {
+  return { type: 'BinaryExpression', left, operator, right };
+}
+
 function BlockStatement(body: any[]) {
   return { type: 'BlockStatement', body };
 }
@@ -34,7 +38,13 @@ describe('Parser', () => {
         type: 'FunctionDeclaration',
         name: Identifier('average'),
         params: [Identifier('a'), Identifier('b')],
-        body: BlockStatement([]),
+        body: BlockStatement([
+          BinaryExpression(
+            BinaryExpression(Identifier('a'), '+', Identifier('b')),
+            '/',
+            NumericLiteral(2)
+          ),
+        ]),
       },
     ]);
 
@@ -73,7 +83,13 @@ describe('Parser', () => {
         type: 'FunctionDeclaration',
         name: Identifier('average'),
         params: [Identifier('a'), Identifier('b')],
-        body: BlockStatement([]),
+        body: BlockStatement([
+          BinaryExpression(
+            BinaryExpression(Identifier('a'), '+', Identifier('b')),
+            '/',
+            NumericLiteral(2)
+          ),
+        ]),
       },
 
       {
