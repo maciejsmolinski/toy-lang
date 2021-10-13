@@ -92,13 +92,15 @@ export default class Parser extends GenericParser {
   private BlockStatement(): BlockStatement {
     this.match('leftBrace');
 
-    let next = this.match();
+    const body = [];
 
-    while (next?.type !== 'rightBrace') {
-      next = this.match();
+    while (this.lookahead?.type !== 'rightBrace') {
+      body.push(this.Statement());
     }
 
-    return { type: 'BlockStatement', body: [] };
+    this.match('rightBrace');
+
+    return { type: 'BlockStatement', body };
   }
 
   private FunctionDeclaration(): FunctionDeclaration {
