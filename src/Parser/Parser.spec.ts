@@ -39,11 +39,11 @@ describe('Parser', () => {
         name: Identifier('average'),
         params: [Identifier('a'), Identifier('b')],
         body: BlockStatement([
-          BinaryExpression(
-            BinaryExpression(Identifier('a'), '+', Identifier('b')),
-            '/',
-            NumericLiteral(2)
-          ),
+          //   BinaryExpression(
+          //     BinaryExpression(Identifier('a'), '+', Identifier('b')),
+          //     '/',
+          //     NumericLiteral(2)
+          //   ),
         ]),
       },
     ]);
@@ -84,11 +84,11 @@ describe('Parser', () => {
         name: Identifier('average'),
         params: [Identifier('a'), Identifier('b')],
         body: BlockStatement([
-          BinaryExpression(
-            BinaryExpression(Identifier('a'), '+', Identifier('b')),
-            '/',
-            NumericLiteral(2)
-          ),
+          //   BinaryExpression(
+          //     BinaryExpression(Identifier('a'), '+', Identifier('b')),
+          //     '/',
+          //     NumericLiteral(2)
+          //   ),
         ]),
       },
 
