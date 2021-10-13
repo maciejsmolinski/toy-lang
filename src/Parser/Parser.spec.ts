@@ -26,7 +26,7 @@ function Program(body: any[]) {
 
 const functionDeclaration = `
 fun average(a, b) {
-  return 1
+  return (a + b) / 2
 }
 `;
 
@@ -42,7 +42,15 @@ describe('Parser', () => {
         type: 'FunctionDeclaration',
         name: Identifier('average'),
         params: [Identifier('a'), Identifier('b')],
-        body: BlockStatement([ReturnStatement(NumericLiteral(1))]),
+        body: BlockStatement([
+          ReturnStatement(
+            BinaryExpression(
+              BinaryExpression(Identifier('a'), '+', Identifier('b')),
+              '/',
+              NumericLiteral(2)
+            )
+          ),
+        ]),
       },
     ]);
 
@@ -81,7 +89,15 @@ describe('Parser', () => {
         type: 'FunctionDeclaration',
         name: Identifier('average'),
         params: [Identifier('a'), Identifier('b')],
-        body: BlockStatement([ReturnStatement(NumericLiteral(1))]),
+        body: BlockStatement([
+          ReturnStatement(
+            BinaryExpression(
+              BinaryExpression(Identifier('a'), '+', Identifier('b')),
+              '/',
+              NumericLiteral(2)
+            )
+          ),
+        ]),
       },
 
       {
