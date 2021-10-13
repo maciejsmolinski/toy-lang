@@ -103,7 +103,31 @@ The output printed on the screen
       ],
       "body": {
         "type": "BlockStatement",
-        "body": []
+        "body": [
+          {
+            "type": "ReturnStatement",
+            "expr": {
+              "type": "BinaryExpression",
+              "left": {
+                "type": "BinaryExpression",
+                "left": {
+                  "type": "Identifier",
+                  "name": "a"
+                },
+                "operator": "+",
+                "right": {
+                  "type": "Identifier",
+                  "name": "b"
+                }
+              },
+              "operator": "/",
+              "right": {
+                "type": "NumericLiteral",
+                "value": 2
+              }
+            }
+          }
+        ]
       }
     },
     {
@@ -125,5 +149,4 @@ The output printed on the screen
     }
   ]
 }
-
 ```
