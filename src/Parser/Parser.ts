@@ -1,5 +1,35 @@
 import GenericParser from './GenericParser';
 
+type Identifier = { type: 'Identifier'; name: string };
+
+type NumericLiteral = { type: 'NumericLiteral'; value: number };
+
+type ReturnStatement = { type: 'ReturnStatement'; expr: Statement };
+
+type Statement =
+  | Identifier
+  | NumericLiteral
+  | ReturnStatement
+  | FunctionDeclaration
+  | FunctionCall;
+
+type BlockStatement = { type: 'BlockStatement'; body: Statement[] };
+
+type FunctionDeclaration = {
+  type: 'FunctionDeclaration';
+  name: Identifier;
+  params: Identifier[];
+  body: BlockStatement;
+};
+
+type FunctionCall = {
+  type: 'FunctionCall';
+  name: Identifier;
+  args: Statement[];
+};
+
+type Program = { type: 'Program'; body: Statement[] };
+
 export default class Parser extends GenericParser {
   parse() {
     return this.Program();
