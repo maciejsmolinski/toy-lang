@@ -6,10 +6,18 @@ type NumericLiteral = { type: 'NumericLiteral'; value: number };
 
 type ReturnStatement = { type: 'ReturnStatement'; expr: Statement };
 
+type BinaryExpression = {
+  type: 'BinaryExpression';
+  left: Statement;
+  operator: string;
+  right: Statement;
+};
+
 type Statement =
   | Identifier
   | NumericLiteral
   | ReturnStatement
+  | BinaryExpression
   | FunctionDeclaration
   | FunctionCall;
 
@@ -50,7 +58,9 @@ export default class Parser extends GenericParser {
   }
 
   private Statement(): Statement {
-    if (this.lookahead?.type === 'identifier') {
+    if (this.lookahead?.type === 'leftParen') {
+      return this.ParenthesizedStatement();
+    } else if (this.lookahead?.type === 'identifier') {
       switch (this.lookahead?.value) {
         case 'fun':
           return this.FunctionDeclaration();
@@ -61,13 +71,23 @@ export default class Parser extends GenericParser {
             return this.FunctionCall(identifier);
           }
 
+          if ((this.lookahead as any)?.type === 'operator') {
+            return this.BinaryExpression(identifier);
+          }
+
           return identifier;
         }
       }
     } else if (this.lookahead?.type === 'return') {
       return this.ReturnStatement();
     } else if (this.lookahead?.type === 'number') {
-      return this.NumericLiteral();
+      const numericLiteral = this.NumericLiteral();
+
+      if ((this.lookahead as any)?.type === 'operator') {
+        return this.BinaryExpression(numericLiteral);
+      }
+
+      return numericLiteral;
     } else {
       throw new Error(`Could not parse ${this.lookahead?.type}`);
     }
@@ -87,6 +107,23 @@ export default class Parser extends GenericParser {
     this.match('return');
 
     return { type: 'ReturnStatement', expr: this.Statement() };
+  }
+
+  private ParenthesizedStatement(): Statement {
+    this.match('leftParen');
+
+    const statement = this.Statement();
+
+    this.match('rightParen');
+
+    return statement;
+  }
+
+  private BinaryExpression(left: Statement): BinaryExpression {
+    const operator = this.match('operator')?.value;
+    const right = this.Statement();
+
+    return { type: 'BinaryExpression', left, operator, right };
   }
 
   private BlockStatement(): BlockStatement {
