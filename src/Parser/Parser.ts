@@ -57,7 +57,18 @@ export default class Parser extends GenericParser {
     return statements;
   }
 
+  // @TODO: Statement -> Expression
   private Statement(): Statement {
+    const statement = this._Statement();
+
+    if (this.lookahead?.type === 'operator') {
+      return this.BinaryExpression(statement);
+    }
+
+    return statement;
+  }
+
+  private _Statement(): Statement {
     if (this.lookahead?.type === 'leftParen') {
       return this.ParenthesizedStatement();
     } else if (this.lookahead?.type === 'identifier') {
@@ -89,7 +100,7 @@ export default class Parser extends GenericParser {
 
       return numericLiteral;
     } else {
-      throw new Error(`Could not parse ${this.lookahead?.type}`);
+      throw new Error(`Could not parse ${JSON.stringify(this.lookahead)}`);
     }
   }
 
