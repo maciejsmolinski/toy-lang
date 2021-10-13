@@ -35,22 +35,21 @@ export default class Parser extends GenericParser {
     return this.Program();
   }
 
-  private Program() {
+  private Program(): Program {
     return { type: 'Program', body: this.Statements() };
   }
 
-  private Statements() {
+  private Statements(): Statement[] {
     const statements = [];
-    let next;
 
-    while ((next = this.Statement())) {
-      statements.push(next);
+    while (this.lookahead?.type) {
+      statements.push(this.Statement());
     }
 
     return statements;
   }
 
-  private Statement() {
+  private Statement(): Statement {
     if (this.lookahead?.type === 'identifier') {
       switch (this.lookahead?.value) {
         case 'fun':
@@ -67,45 +66,30 @@ export default class Parser extends GenericParser {
       }
     } else if (this.lookahead?.type === 'return') {
       return this.ReturnStatement();
+    } else if (this.lookahead?.type === 'number') {
+      return this.NumericLiteral();
     } else {
-      // Consume next token, return nothing
-      this.match();
-      return;
+      throw new Error(`Could not parse ${this.lookahead?.type}`);
     }
   }
 
-  private Identifier(): { type: 'Identifier'; name: string } {
+  private Identifier(): Identifier {
     const identifier = this.match('identifier');
 
     return { type: 'Identifier', name: identifier?.value };
   }
 
-  private Literal() {
-    switch (this.lookahead?.type) {
-      default:
-        return this.NumericLiteral();
-    }
-  }
-
-  private NumericLiteral() {
+  private NumericLiteral(): NumericLiteral {
     return { type: 'NumericLiteral', value: this.match('number')?.value };
   }
 
-  private Expression() {
-    // @TODO
-  }
-
-  private BinaryExpression() {
-    // @TODO
-  }
-
-  private ReturnStatement() {
+  private ReturnStatement(): ReturnStatement {
     this.match('return');
-    const expr = this.match();
-    return { type: 'ReturnStatement', expr };
+
+    return { type: 'ReturnStatement', expr: this.Statement() };
   }
 
-  private BlockStatement() {
+  private BlockStatement(): BlockStatement {
     this.match('leftBrace');
 
     let next = this.match();
@@ -117,7 +101,7 @@ export default class Parser extends GenericParser {
     return { type: 'BlockStatement', body: [] };
   }
 
-  private FunctionDeclaration() {
+  private FunctionDeclaration(): FunctionDeclaration {
     this.match('identifier', 'fun');
 
     const name = this.Identifier();
@@ -136,7 +120,7 @@ export default class Parser extends GenericParser {
     return { type: 'FunctionDeclaration', name, params, body };
   }
 
-  private ParametersList() {
+  private ParametersList(): Identifier[] {
     const params = [];
 
     do {
@@ -146,7 +130,7 @@ export default class Parser extends GenericParser {
     return params;
   }
 
-  private FunctionCall(name: { type: 'Identifier'; name: string }) {
+  private FunctionCall(name: Identifier): FunctionCall {
     const args = [];
 
     this.match('leftParen');
@@ -162,11 +146,14 @@ export default class Parser extends GenericParser {
       }
 
       if (next?.type === 'number') {
-        args.push({ type: 'NumericLiteral', value: next?.value });
+        args.push({
+          type: 'NumericLiteral',
+          value: next?.value,
+        } as NumericLiteral);
       }
 
       if (next?.type === 'identifier') {
-        args.push({ type: 'Identifier', name: next?.value });
+        args.push({ type: 'Identifier', name: next?.value } as Identifier);
       }
     }
 
